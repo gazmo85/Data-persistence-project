@@ -4,21 +4,38 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
 public class MainManager : MonoBehaviour
 {
+
+
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
 
     public Text ScoreText;
     public GameObject GameOverText;
-    
+
+    //public string playerName;
+
+    [SerializeField]
+    private Text highscorePlayerScoreText;
+
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
 
-    
+    private void Awake()
+    {
+        // Canvas menuCanvas = Menu.Instance.canvas.GetComponent<Canvas>();
+      //  Menu.Instance.canvas.SetActive(false);
+        
+       
+
+        highscorePlayerScoreText.text = "Best Score : " + Menu.Instance.highscoreName + " : " + Menu.Instance.highscoreScore;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,7 +74,7 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene(0);
             }
         }
     }
@@ -72,5 +89,11 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+
+        if (m_Points > Menu.Instance.highscoreScore)
+            Menu.Instance.SaveHighscore(m_Points);
+
+        Menu.Instance.QuitApplication();
     }
+
 }
